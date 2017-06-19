@@ -2,6 +2,14 @@
 # By - Matt Boone (2015) & Auriel Fournier (2015)
 # Modified by Auriel Fournier for 2016 NAOC Workshop
 
+
+#apply functions in tidyverse
+
+## #last 30 minutes of the day
+        #top 5 things to check when things go wrong
+        # how to look up an answer
+        # how to submit an problem to stack overflow
+
 ####################################
 # Necessary packages
 ####################################
