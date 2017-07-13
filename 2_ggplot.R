@@ -1,7 +1,7 @@
-######################################
-## GGPLOT SECTION OF NAOC WORKSHOP
-######################################
-# https://github.com/aurielfournier/naoc_2016_r_workshop
+### -- ggplot2 section
+### -- By - Auriel Fournier
+### -- https://github.com/aurielfournier/AOSSCO17
+
 # use install.packages() if you don't have these already
 library(dplyr)
 library(ggplot2) 
@@ -10,35 +10,34 @@ library(RColorBrewer)
 library(gridExtra)
 library(gapminder) 
 
-#ggplot2 is built on the grammar of graphics, the idea that any plot can be
-#expressed from the same set of components: 
+# ggplot2 is built on the grammar of graphics, the idea that any plot can be expressed from the same set of components: 
 # a **data** set
 # a **coordinate system**
 # and a set of **geoms** --the visual representation of data points.
 
-#The key to understanding ggplot2 is thinking about a figure in layers.
-#This idea may be familiar to you if you have used image editing programs like Photoshop#, Illustrator, or Inkscape.
+# The key to understanding ggplot2 is thinking about a figure in layers.
+# This idea may be familiar to you if you have used image editing programs like Photoshop#, Illustrator, or Inkscape.
 
-#Let's start off with an example:
+# Let's start off with an example:
 
 ggplot(data = gapminder, 
        aes(x = gdpPercap, y = lifeExp)) +
   geom_point()
 
-#So the first thing we do is call the `ggplot` function. This function lets R
-#know that we're creating a new plot, and any of the arguments we give the
-#`ggplot` function are the *global* options for the plot: they apply to all
-#layers on the plot.
+# So the first thing we do is call the `ggplot` function. This function lets R
+# know that we're creating a new plot, and any of the arguments we give the
+# `ggplot` function are the *global* options for the plot: they apply to all
+# layers on the plot.
 
-#We've passed in two arguments to `ggplot`. First, we tell `ggplot` what data we
-#want to show on our figure, in this example the gapminder data we read in
-#earlier. For the second argument we passed in the `aes` function, which
-#tells `ggplot` how variables in the **data** map to *aesthetic* properties of
-#the figure, in this case the **x** and **y** locations. Here we told `ggplot` we
-#want to plot the "gdpPercap" column of the gapminder data frame on the x-axis, and
-#the "lifeExp" column on the y-axis. Notice that we didn't need to explicitly
-#pass `aes` these columns (e.g. `x = gapminder[, "gdpPercap"]`), this is because
-#`ggplot` is smart enough to know to look in the **data** for that column!
+# We've passed in two arguments to `ggplot`. First, we tell `ggplot` what data we
+# want to show on our figure, in this example the gapminder data we read in
+# earlier. For the second argument we passed in the `aes` function, which
+# tells `ggplot` how variables in the **data** map to *aesthetic* properties of
+# the figure, in this case the **x** and **y** locations. Here we told `ggplot` we
+# want to plot the "gdpPercap" column of the gapminder data frame on the x-axis, and
+# the "lifeExp" column on the y-axis. Notice that we didn't need to explicitly
+# pass `aes` these columns (e.g. `x = gapminder[, "gdpPercap"]`), this is because
+# `ggplot` is smart enough to know to look in the **data** for that column!
   
 #  By itself, the call to `ggplot` isn't enough to draw a figure:
 

@@ -6,6 +6,8 @@ library (dplyr)
 library (ggplot2)
 library(tidyr)
 
+### -- https://github.com/aurielfournier/AOSSCO17
+
 ##############################################################################
 # We're now moving into the real fun stuff
 # but first I need to teach you about some important functions you'll likely only use

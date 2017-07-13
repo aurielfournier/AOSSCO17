@@ -1,18 +1,13 @@
-###Introduction and refreshers for R
-# By - Matt Boone (2015) & Auriel Fournier (2015)
-# Modified by Auriel Fournier for 2016 NAOC Workshop
+### -- Introduction and refreshers for R
+### -- By - Matt Boone (2015) & Auriel Fournier (2015)
+### -- Modified by Auriel Fournier for 2016 NAOC Workshop
 
 
-#apply functions in tidyverse
+### -- https://github.com/aurielfournier/AOSSCO17
 
-## #last 30 minutes of the day
-        #top 5 things to check when things go wrong
-        # how to look up an answer
-        # how to submit an problem to stack overflow
-
-####################################
-# Necessary packages
-####################################
+#######################################
+### -- Necessary packages
+#######################################
 
 library(gapminder)
 library(dplyr)
@@ -20,7 +15,7 @@ library(tidyr)
 library(ggplot2)
 
 ###################
-## Loading In The Data
+### -- Loading In The Data
 ####################
 
 data(gapminder)
@@ -31,7 +26,7 @@ head(gapminder)
 # Explain the verbs of dplyr
 
 #########################
-## Filtering
+### -- Filtering
 #########################
 
 gapminder %>%
@@ -53,7 +48,7 @@ gapminder %>%
           filter(year>=1987&year<=2002) %>% distinct(year)
 
 #########################
-# Match     %in%   
+### -- Match %in%   
 #########################
 
 sub_countries <- c("Afghanistan","Australia", "Zambia")
@@ -63,7 +58,7 @@ gapminder %>%
           filter(country %in% sub_countries) %>% distinct(country)
 
 #########################
-## GROUPING
+### -- GROUPING
 #########################
 
 gapminder %>%
@@ -75,11 +70,8 @@ gapminder %>%
   group_by(continent, year) %>%
   summarize(mean=mean(lifeExp))
 
-
-# https://github.com/aurielfournier/naoc_2016_r_workshop
-
 #########################################
-## CHALLENGE
+### -- CHALLENGE
 #########################################
 
 # What is the median life expenctancy 
