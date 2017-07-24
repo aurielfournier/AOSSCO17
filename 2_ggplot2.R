@@ -128,12 +128,12 @@ ggplot(data = gapminder,
            y = lifeExp, color=continent)) +
   geom_point()
 
-#Currently it's hard to see the relationship between the points due to some strong
-#outliers in GDP per capita. We can change the scale of units on the x axis using
-#the *scale* functions. These control the mapping between the data values and
-#visual values of an aesthetic. We can also modify the transparency  of the
-#points, using the *alpha* funtion, which is especially helpful when you have
-#a large amount of data which is very clustered.
+# Currently it's hard to see the relationship between the points due to some strong
+# outliers in GDP per capita. We can change the scale of units on the x axis using
+# the *scale* functions. These control the mapping between the data values and
+# visual values of an aesthetic. We can also modify the transparency  of the
+# points, using the *alpha* funtion, which is especially helpful when you have
+# a large amount of data which is very clustered.
 
 ggplot(data = gapminder, 
        aes(x = gdpPercap, 
@@ -142,34 +142,34 @@ ggplot(data = gapminder,
              aes(color=continent)) + 
   scale_x_log10()  
 
-#The `log10` function applied a transformation to the values of the gdpPercap
-#column before rendering them on the plot, so that each multiple of 10 now only
-#corresponds to an increase in 1 on the transformed scale, e.g. a GDP per capita
-#of 1,000 is now 3 on the y axis, a value of 10,000 corresponds to 4 on the y
-#axis and so on. This makes it easier to visualise the spread of data on the
-#x-axis.
+# The `log10` function applied a transformation to the values of the gdpPercap
+# column before rendering them on the plot, so that each multiple of 10 now only
+# corresponds to an increase in 1 on the transformed scale, e.g. a GDP per capita
+# of 1,000 is now 3 on the y axis, a value of 10,000 corresponds to 4 on the y
+# axis and so on. This makes it easier to visualise the spread of data on the
+# x-axis.
 
-#We can fit a simple relationship to the data by adding another layer,
+# We can fit a simple relationship to the data by adding another layer,
 #`geom_smooth`:
   
 ggplot(data = gapminder, 
   aes(x = gdpPercap, y = lifeExp)) +
   geom_point(alpha=0.5) + 
   scale_x_log10() + 
-  geom_smooth(method="lm", aes(by=continent, size=1.5))
+  geom_smooth(method="lm", aes(group=continent))
 
-#We can make the line thicker by *setting* the **size** aesthetic in the
-#`geom_smooth` layer:
+# We can make the line thicker by *setting* the **size** aesthetic in the
+# `geom_smooth` layer:
   
 ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
   geom_point() + 
   scale_x_log10() + 
   geom_smooth(method="lm", size=1.5)
 
-#There are two ways an *aesthetic* can be specified. Here we *set* the **size**
+# There are two ways an *aesthetic* can be specified. Here we *set* the **size**
 #  aesthetic by passing it as an argument to `geom_smooth`. Previously in the
-#lesson we've used the `aes` function to define a *mapping* between data
-#variables and their visual representation.
+# lesson we've used the `aes` function to define a *mapping* between data
+# variables and their visual representation.
 
 # ## Challenge 4a
 
@@ -179,12 +179,21 @@ ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
 # Hint: do not use the `aes` function.
 #
 
+ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(color="red", size=2) + 
+  scale_x_log10() + 
+  geom_smooth(method="lm", size=1.5)
+
 ## Challenge 4b 
 #
-# Modify your solution to Challenge 4a so that the points are now a different shape and are colored by continent with new trendlines.
+# Modify your solution to Challenge 4a so that the points are now a different shape and are colored by continent.
 
-#  Hint: The color argument can be used inside the aesthetic.
-#
+ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(aes(color=continent), shape=2) + 
+  scale_x_log10() + 
+  geom_smooth(method="lm", size=1.5)
+
+#  Hint: The color argument can be used inside and outside the aesthetic 'aes()'.
 
 # we can also use pipes to deliver our data to ggplot
 
@@ -195,10 +204,10 @@ gapminder %>%
 
 ## Multi-panel figures
 
-#Earlier we visualised the change in life expectancy over time across all
-#countries in one plot. Alternatively, we can split this out over multiple panels
-#by adding a layer of **facet** panels. Focusing only on those countries with
-#names that start with the letter "A" or "Z".
+# Earlier we visualised the change in life expectancy over time across all
+# countries in one plot. Alternatively, we can split this out over multiple panels
+# by adding a layer of **facet** panels. Focusing only on those countries with
+# names that start with the letter "A" or "Z".
 
 ggplot(data=gapminder, 
        aes(x = year, 
@@ -207,20 +216,20 @@ ggplot(data=gapminder,
   geom_line() + 
   facet_wrap(~continent, ncol=2)
 
-#The `facet_wrap` layer took a "formula" as its argument, denoted by the tilde
-#(~). This tells R to draw a panel for each unique value in the country column
-#of the gapminder dataset.
+# The `facet_wrap` layer took a "formula" as its argument, denoted by the tilde
+# (~). This tells R to draw a panel for each unique value in the country column
+# of the gapminder dataset.
 
 ## Modifying text
 
-##To clean this figure up for a publication we need to change some of the text
-#elements. The x-axis is too cluttered, and the y axis should read
-#"Life expectancy", rather than the column name in the data frame.
+# To clean this figure up for a publication we need to change some of the text
+# elements. The x-axis is too cluttered, and the y axis should read
+# "Life expectancy", rather than the column name in the data frame.
 
-#We can do this by adding a couple of different layers. The **theme** layer
-#controls the axis text, and overall text size, and there are special layers
-#for changing the axis labels. To change the legend title, we need to use the
-#**scales** layer.
+# We can do this by adding a couple of different layers. The **theme** layer
+# controls the axis text, and overall text size, and there are special layers
+# for changing the axis labels. To change the legend title, we need to use the
+# **scale** layer.
 
 ggplot(data = gapminder, 
        aes(x = year, y = lifeExp, group=country,
@@ -234,15 +243,15 @@ ggplot(data = gapminder,
     theme_few()
 
 
-#This is a taste of what you can do with `ggplot2`. RStudio provides a
-#really useful cheat sheet of the different layers available, and more
-#extensive documentation is available on the [ggplot2 website][ggplot-doc].
-#Finally, if you have no idea how to change something, a quick google search will
-#usually send you to a relevant question and answer on Stack Overflow with reusable
-#code to modify!
+# This is a taste of what you can do with `ggplot2`. RStudio provides a
+# really useful cheat sheet of the different layers available, and more
+# extensive documentation is available on the [ggplot2 website][ggplot-doc].
+# Finally, if you have no idea how to change something, a quick google search will
+# usually send you to a relevant question and answer on Stack Overflow with reusable
+# code to modify!
 
-#http://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
-#http://docs.ggplot2.org/current/
+# http://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
+# http://docs.ggplot2.org/current/
 
 
 
@@ -250,24 +259,54 @@ ggplot(data = gapminder,
 # OR you can use some pre made themes
 # https://github.com/jrnold/ggthemes
 
-
-
- ## Challenge 5 
-
-# Create a density plot of GDP per capita, 
-# filled by continent.
-# geom_density
-
-# Advanced:
-#  - Add a facet layer to panel 
-# the density plots by year.
 ggplot(data=gapminder, 
-       aes(x=gdpPercap, 
-          fill=continent))+
-    geom_density()+
-    facet_wrap(~continent)+
-    theme_krementz()
+       aes(x = year, 
+           y = lifeExp, 
+           group=country)) +
+  geom_line()+
+  theme_economist()
 
+ggplot(data=gapminder, 
+       aes(x = year, 
+           y = lifeExp, 
+           group=country)) +
+  geom_line()+
+  theme_gdocs()
+
+ggplot(data=gapminder, 
+       aes(x = year, 
+           y = lifeExp, 
+           group=country)) +
+  geom_line()+
+  theme_excel()
+
+## Custom Themes
+
+?theme # shows you all the little things you can manipulate in a ggplot
+# thus far I've always been able to get done what needs doing with a custom theme
+# look at the graph below, its pretty visually assualting
+# figure out how to fix it
+
+ggplot(data=gapminder, 
+       aes(x = year, 
+           y = lifeExp, 
+           group=country)) +
+  geom_line(aes(color=continent), size=0.1)+
+  facet_wrap(~continent)+
+  theme(axis.text.x = element_text(size = 2, color = "black"), 
+        axis.text.y = element_text(size = 25, color = "black"), 
+        axis.title.y = element_text(size = 35), 
+        plot.background = element_rect(fill="orange"), 
+        panel.background = element_rect(fill="purple"), 
+        panel.grid.major = element_line(colour = NA), 
+        panel.grid.minor = element_line(colour = NA), 
+        title = element_text(size = 20), 
+        axis.line.x = element_line(colour = "black"), 
+        axis.line.y = element_line(colour = "black"), 
+        strip.background = element_rect(fill = "red", color = "blue"), 
+        strip.text = element_text(size = 15, color="green"),
+        legend.background = element_rect(fill="blue"),
+        legend.text = element_text(color="yellow"))
   
 
 
