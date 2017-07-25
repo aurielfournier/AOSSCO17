@@ -1,5 +1,4 @@
-# naoc_2016_r_workshop
-Home for the code and materials for Advanced R workshop being taught at the North American Ornithologican Conference in August 2016
-
+# Workshop Materials for the American Ornithological Society/Society of Canadian Ornithologist R Workshop
+Home for the code and materials for Advanced R workshop being taught at the AOS/SCO Workshop in East Lansing, MI August 2017
 
 Questions - aurielfournier@gmail.com @RallidaeRule
