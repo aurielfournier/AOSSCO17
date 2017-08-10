@@ -3,7 +3,7 @@
 ### -- Modified by Auriel Fournier for 2016 NAOC Workshop
 
 
-### -- https://github.com/aurielfournier/AOSSCO17
+### -- https://github.com/aurielfournier/AOSSCO17  
 
 #######################################
 ### -- Necessary packages
@@ -29,9 +29,12 @@ head(gapminder)
 ### -- Filtering
 #########################
 
-gapminder %>%
+gdat <- gapminder %>%
         filter(continent=='Europe',
                year==1987)
+
+a = 100
+a <- 100
 
 gapminder %>%
   filter(continent=='Europe',
@@ -40,7 +43,8 @@ gapminder %>%
 
 # the "|" means 'or' in R
 gapminder %>%
-      filter(continent=="Europe"|continent=="Asia") %>% 
+      filter(continent=="Europe"|continent=="Asia") %>%
+      # comments here 
       distinct(continent)
 
 # the "&" means "and" in R
@@ -57,16 +61,23 @@ sub_countries <- c("Afghanistan","Australia", "Zambia")
 gapminder %>%
           filter(country %in% sub_countries) %>% distinct(country)
 
+gdat <- gapminder %>%
+  filter(country %in% sub_countries)
+
+distinct(gdat, country)
+
+
 #########################
 ### -- GROUPING
 #########################
 
 gapminder %>%
   group_by(continent) %>%
-  summarize(mean = mean(lifeExp))
+  summarize(nova = mean(lifeExp),
+            median = median(lifeExp))
 
 
-gapminder %>% 
+gdat <- gapminder %>% 
   group_by(continent, year) %>%
   summarize(mean=mean(lifeExp))
 
@@ -75,27 +86,37 @@ gapminder %>%
 #########################################
 
 # What is the median life expenctancy 
-# and population for each country in Asia in 1987
+# and population for each country in Asia 
 
 new_data <- gapminder %>% 
-  filter(continent == "Asia" & year == 1987) %>%
+  filter(continent == "Asia") %>% #distinct(continent)
   group_by(country) %>%
   summarise(medianL = median(lifeExp),
-            medianP = median(pop))
+            medianP = median(pop),
+            count = n())
 
+
+#note to self talk about Kiwi vs Us spelling
+# note to self talk about n()
 #########################
 ## MUTATE
 #########################
 
+colors <- c("red","green")
+
 (mgap <- gapminder %>%  
-  mutate(country_continent = paste0(country,"_",continent)) %>%
-   select(year, lifeExp, pop, gdpPercap, country_continent))
+  mutate(country_continent = paste0(country,"_",continent),
+         gdp = gdpPercap/pop,
+         favorite_color = 'green',
+         yearfactor = factor(year)) %>%
+   select(year, country_continent, gdp, favorite_color, yearfactor))
 
 # or
 
 gapminder %>%
-  mutate(example = ifelse(country == "United States","Yes","No")) %>%
-  select(example)
+  mutate(example = ifelse(country == "Afghanistan","Yes","No"),
+         n1980s = ifelse(year>=1980&year<=1989,"Yes","No")) %>%
+  select(example, n1980s)
 
 ########################
 ## Separate
@@ -105,13 +126,16 @@ mgap %>%
   separate(country_continent, 
            sep="_", 
            into=c("country",
-                  "continent")) 
+                  "continent"),
+           remove=FALSE) 
 
 # or
 
 mgap %>% 
-  separate(year, sep=2, 
-           into=c("century","year"))
+  separate(year, sep=c(-4,-3), 
+           into=c("century","y1","y2")) %>%
+  mutate(century=as.numeric(century),
+         year = as.numeric(y1))
 
 ########################
 ## Joins
@@ -122,8 +146,7 @@ mgap %>%
 # indicating whether or not the original star wars had been released yet in that year
 
 star_wars_dat <- data.frame(year=c(unique(gapminder$year)[2:10],2012), 
-                            star_wars_released=c("No","No","No","No","YES","YES","YES",
-                                                 "YES","YES","YES"))
+                            star_wars_released=c("No","No","No","No","YES","YES","YES","YES","YES","YES"))
 
 # you will notice this does not include 1952, 2002 and 2007
 full_join(gapminder, star_wars_dat, by="year") %>% distinct(year)
@@ -143,6 +166,18 @@ inner_join(gapminder, star_wars_dat, by="year") %>% distinct(year)
 # only things that are in common
 
 
+g1 <- gapminder %>% select(country, year)
+
+g2 <- gapminder %>% select(lifeExp, continent)
+
+
+gg <- cbind(g1, g2)
+gg <- bind_cols(g1, g2)
+
+rbind()
+bind_rows()
+
+
 #####################################
 ## CHALLENGE
 #####################################
@@ -158,7 +193,7 @@ gapminder %>%
   filter(year==2002) %>%
   group_by(continent) %>%
   sample_n(2) %>%
-  assign("countries_selected",.) %>%
+  #assign("countries_selected",.) %>%
   group_by(country, continent) %>%
   summarize(mean=mean(lifeExp)) %>%
   arrange(., desc(continent))
@@ -204,6 +239,11 @@ lt$year+1900  ##converts you to standard time
 
 ##these are particularly useful because you can do math on time
 earlytime<-as.POSIXct('2015-03-23',format='%Y-%m-%d')
+
+times <- c(0,31)
+
+round(lt$sec,1) %>% filter(match %in% times)
+
 
 ct - earlytime 
 

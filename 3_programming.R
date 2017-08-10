@@ -4,7 +4,7 @@
 ##  by - Matt Boone (2015) modified by Auriel Fournier (2016)                  ##
 library (dplyr)
 library (ggplot2)
-library(tidyr)
+library (tidyr)
 
 ### -- https://github.com/aurielfournier/AOSSCO17
 
@@ -58,15 +58,23 @@ IF I am Hungry I will Eat
 # Every language approaches this slightly differnetly. IN R's case it uses the if() function. Where we tell if IF something is TRUE then do something.
 # In the R case, it evaluates whats inside the parenthesis then it does what you tell it to do
 # So in a theoretical case:
-IF(ME=='Hungry'){eat()}
+if()
+IF(ME=='Hungry') {eat()
+  run()
+  sleep()
+  
+  
+  
+  }
+
+
 # telling R if i'm hungry, run the eat function. Now that's a nonsense function obviously.
 # An important note is If it isnt true then it does nothing. Atleast as of now
 #Lets move into a more realistic scenario.
 # Say we have an object P, and i want to know if P is a large number (large than 100) or a small number (less than 100)
-
+P<-500
+P
 if(P>100){print("That is a large number")}  ## so if P is greater than 100 it will print the phrase, that is a large number
-
-
 if(P<=100){print("That is a small number")}   ##if P is less than or equal to 100 it will print, that is a small number
 
 #mention T/F
@@ -84,13 +92,14 @@ tt   #is our random number
 # a set of things to do if the statement was not true
 if(tt>5){
   print('number is greater than 5') }else {
-    print('number is less than 5')}
+    print('number is less than 5')
+    }
 
 #important to put brackets
 
 #If else is a 'wrapper' function meaning it automatically loops through the values given to you. while its overkill it also puts it nicely into a single function
 ifelse(tt>5,'number is greater than 5',"number is less than 5")
-
+ifelse(1:10,'number is greater than 5', 'number is less than 5')
 #It's a wrapper function meaning it will do this
 1:10
 ifelse(1:10>5, 'number is greater than 5', 'number is less than 5')
@@ -98,10 +107,11 @@ ifelse(1:10>5, 'number is greater than 5', 'number is less than 5')
 
 ##These if statements can get complicated quickly. Say we want to add in what happens if the number does equal 5
 if(tt>5){print('number is greater than 5')} else {
+  
   if(tt<5){print('number is less than 5')} else {
     print('number is 5')
-    }
-  }
+    } # this is the second else
+  } #this is the first ifelse
 
 #At the end of the day, this is logic, right. Telling R exactly what to do and when to do. And with it we control R
 # I generally try not to put these in the ifelse wrapper
@@ -117,26 +127,34 @@ if(tt>5){print('number is greater than 5')} else {
 #When is this useful?
 # I use this to control what happens when certain inputs are possible and we need to do something different for each situation, or if there is something that will make it fail.
 # For instance lets say if we subset a data set and it ends up with zero rows. We dont want our script to fail
-ebird<-read.csv('file:///C:/Users/birde/Documents/ebird_NJ.csv')
+setwd('C:/Users/amf698/Documents/AOSSCO17/')
+ebird<-read.csv('ebird_data.csv')
 
 #Lets say we are running through different ebird data sets and want to pull out resident seabird species. Which are rare in most regions but exist in some places, like the west coast.
 sub.ebird<-subset(ebird, pelagic==1 & perennial==1)
 sub.ebird <- ebird %>% filter(pelagic==1, perennial==1)
 #This results in zero rows, you can tell R how to handle this situation. In a couple of ways
-if(nrow(sub.data)>0){ Tell it what to do }
-if(nrow(sub.data)==0){print('Data has zero rows')}
-if(nrow(sub.data)==0){print('Data has zero rows, skipping');next}
+nrow(sub.ebird)
+if(nrow(sub.ebird)>0){ Tell it what to do }
+if(nrow(sub.ebird)==0){print('Data has zero rows'); stop }
+if(nrow(sub.ebird)==0){print('Data has zero rows, skipping');next}
 
 ####### Example time
 # Lets now try a practice example. 
 # Lets say we want to write a code that gives us average presence no matter what we subset our data by. But from previous analysis we know that taking a mean presence is not very robust when we only have an N<=30. When it's under an N of 30 we're more interested in the median value. I do not want it to analyze data that has an N<3
 # Bonus if you can have the code tell us what analysis it used and the N of the value.
 # Some useful functions may be: nrow(), mean(), median(), paste0(), print()
-sub.data<-subset(data, migrant==1 & shorebird==1)
+#sub.data<-subset(data, migrant==1 & shorebird==1)
+sub.ebird<-ebird %>% filter(pelagic==1 , perennial==1)
 
-if(nrow(sub.data)>3){
-  if(nrow(sub.data)>30){mean(sub.data$presence)}
-  if(nrow(sub.data)<=30){median(sub.data$presence)}}
+if(nrow(sub.ebird)>3){
+  
+  if(nrow(sub.ebird)>30){print('I took the mean');print(mean(sub.ebird$presence))}
+  if(nrow(sub.ebird)<=30){print('The median is:' )
+    print(median(sub.ebird$presence))}
+  
+}
+if(nrow(sub.ebird)>=3){}
 
 
 #What you might be thinking right now, is that IF examples might be used rarely, particularly because in single example situations like this you wont be changing your inputs and if you did you'll know what the row lengths are, or can control if something doesnt exist in a data set.
@@ -147,8 +165,10 @@ if(nrow(sub.data)>3){
 #############################################################
 ##an iterative process that loops through a sequence
 
-for(i in 1:10){ 
-  print(i) 
+for(radar in c('KDOX','KDIX','KBUF')){ 
+  
+  print(radar) 
+  
 }   ###what did this do?
 i<-1
 print(i)
@@ -173,7 +193,9 @@ print(i)
 #we can treat it like a normal variable
 
 for(i in 1:10){
+  
   print(i+1)
+  
 }  ## in this case we want to add 1 to that value. So it took 1 and added 1 (equals 2), then took the next value (2) and added 1 (equals 3) so on and so on.
 
 #####
@@ -186,16 +208,17 @@ for(i in c('Matt','Auriel','Liz')){
   if(i=='Matt'){print('Matt is awesome')}
   if(i=="Auriel"){print('Auriel is not')}
 }
+
 ## for loops are useful for refering to rows or columns in a data set if we just feed it sequential numbers
 data<-matrix(1:100,nrow=10,ncol=10)
 data
 
 for(i in 1:10){
-  print(data[i,1])
+  print(data[i,2])
 }    ### is going to loop through all the rows in column 1 (and print that value)
 
 for(i in 1:10){
-  print(data[i,2])
+  print(data[1,i])
 }    ###loops through all the rows in column 2 (and prints that value)
 
 for(i in 1:10){
@@ -204,14 +227,15 @@ for(i in 1:10){
 
 data[,1] <- 100
 
-for(i in 1:10){
-  data[i,2]<-data[i,1]+10
-}   ###does the same thing but stores the value in the correct row in column 2
+for(i in 1:9){
+  data[i,2]<-data[i,1]+15
+  }   ###does the same thing but stores the value in the correct row in column 2
 
 data
 
-data[,2]<- data[,1]+10  ###is the best way to do this particular task
+data[,2]<- data[,1]+15  ###is the best way to do this particular task
 
+data * data
 #At this point you may be asking, well this is extremely useful or but wait Matt, that's not how you do that. 
 # You're correct, for loops are one of the bases of all of programming. But, R has already written many of its functions with internal for loops, but in the C++ code, not in the R code.
 #many functions can be vectorized, meaning r automatically loops things together
@@ -228,11 +252,10 @@ for(i in 1:10){
 #1. Put in a line at the top that allows you to read in a dummy variable
 
 for(i in 1:10){
-  #i<-1
-  print(i)
-  
+  #i<-2
+  data[,5+i] 
 }
-
+i
 #2. Print the outputs, or save middle outputs
 for(i in c(1,2,NA,4)){
   print(i)
@@ -244,12 +267,19 @@ for(i in c(1,2,NA,4)){
 }
 
 #3. Write the for loop last
-for(i in 1:10){
+
+for( i in 1:10) { 
 #i<-1
-mean(i)+2
-print(paste0('the answer is: ', i))}
+d<-mean(i)+2
+print(paste0('the answer is: ', d))
 
+}
 
+ebird$Family<-NA
+ebird$family[ebird$group=='Ducks']<-'Anatidae'
+
+ebird %>%
+    mutate(Family = ifelse(group=="Ducks","Anatidae",NA))
 ##############################
 # Summary of if and for loops
 #####################################################################
@@ -273,16 +303,30 @@ print(paste0('the answer is: ', i))}
 # C*(9/5) +32
 # use : for, if, print, and paste0
 # https://github.com/aurielfournier/naoc_2016_r_workshop
-
+length()
+length(c(1,10))
 values<-c(30,25,6)
 values<-sample(1:40,10)
-for(i in values){  d<-i*9/5 +32;  ifelse(d<50,print(paste0(d,' degrees is cold')),print(d))
+
+
+for(i in values){  d<-i*9/5 +32
+ifelse(d<50,print(paste0(d,' degrees is cold')),print(d))
 }
 
+for(i in 1:length(values)){
+  C = values[i]
+  d <- C*9/5+32
+  ifelse(d<50, print(paste0(d, ' degrees is cold')), print(paste0(d,' degress is perfect')))
+}
+
+
+values
 for(i in values){
-  d<-i*9/5 +32
-  if(d<50){print(paste0(d,' degrees is cold'))}
-  if(d>50){print(paste0(d,' degrees is perfect'))}
+#i<-30  
+  f<-i*9/5 +32
+  #f
+  if(f<50){print(paste0(f,' degrees is cold'))} else{print(paste0(f,' degrees is perfect'))}
+  
 }
 
 
@@ -307,15 +351,15 @@ for(i in values){
 # function() parenthesis
 #
 
-temp_fun <- function(temp_values){ 
+temp_fun <- function(temp_values, trim){ 
   for(i in temp_values){
-    d<-i*9/5 +32
+    d<-(i*9/5 +32 ) * trim
     if(d<=50) { print(paste0(d,' degrees is cold')) }
     if(d>50) { print(paste0(d," degrees is hot")) }
   } 
 }
 
-
+temp_fun(30,trim=.7)
 # which can be simplified further
 temp_fun<-function(temp_values){
   d<-temp_values*9/5 + 32
@@ -404,12 +448,14 @@ ggplot(data=result, aes(x=quarter_month, y=value)) +
 # Paste() is one of the most powerful tools for moving your experience from beginner to expert,
 # and in particular refering to file paths on your computer based on the naming strucutre
 #remember paste automatically adds a space between your two objects
-paste('hello','world')   
+paste('hello','world','im','hungry')   
 #paste0 does not
 paste0('hello','world')
 #so we have to tell it what we want between each object
 paste0('hello',' ','world')  # if you notice we told it to put a space (' ') between Hello and World
-
+for(state in c('TX','NJ')){
+print(paste0('ebird_',state,'.csv'))
+}
 # say we want  to have a program that you give its name, and it tells you hello
 name<-c('Matt',"Auriel")
 paste0('hello, ',name,' how are you?')
@@ -425,7 +471,8 @@ foo(name='matt')
 ## lets read in file names
 folder<-'Monstersinc'
 file<-'scaretotal_MikeW_March.csv'
-
+setwd('C:/Users/amf698/Documents/AOSSCO17/Monstersinc')
+read.csv(file)
 paste0(folder,'/',file)   # so its going to look in what ever folder we told it (Monstersinc in this case)
 # and then its going to look for the file we tell it (in this case scaretotal_MikeW_March.csv)
 read.csv(paste0(folder,'/',file))
@@ -442,11 +489,11 @@ read.csv(paste0(folder,'/',file))
 #file3: scaretotal_MikeW_April.csv
 #file4  scaretotal_JamesS_April.csv
 
-name<-'MikeW'
-month<-'March'
+name<-'JamesS'
+month<-'April'
 
 ####read in this file
-data<-read.csv(paste0(folder,'/','scaretotal_',name,'_',month,'.csv'))
+data<-read.csv(paste0('scaretotal_',name,'_',month,'.csv'))
 
 # 4. Keep your brackets in order, and label them if necessary
 ##Lets do the same, but now lets write a loop function that loads all
@@ -462,9 +509,20 @@ month<-c('March','April')
 ##variables#####
 our.list<-list()
 
-for(p in month){
-  our.list[[paste0('MikeW_',p)]]<-read.csv(paste0(folder,'/','scaretotal_MikeW','_',p,'.csv'))
+for(mon in month){
+  #mon<-'April'
+  our.list[[paste0('MikeW_',mon)]]<-read.csv(paste0('scaretotal_MikeW','_',mon,'.csv'))
 } 
+
+#############
+files<-list.files()
+our.list<-list()
+for(i in files){
+  our.list[[i]]<-read.csv(i)
+}
+
+list.files()
+strsplit('_', files)
 
 ##now lets put it all together, lets make it so reads in all the files for both Mike and James for
 # both the months of March and April
@@ -489,7 +547,7 @@ for(i in name){
 #### How to look over files with list.files()
 our.files <- list()
 
-files <- list.files("Monstersinc/",pattern=".csv")
+files <- list.files(pattern="MikeW")
 
 for(i in files){
   our.files[[i]] <- read.csv(paste0("Monstersinc/",i))

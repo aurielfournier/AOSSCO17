@@ -67,6 +67,12 @@ ggplot(data = gapminder,
 # code from the previous challenge to **color** the points by the "continent"
 # column. What trends do you see in the data? Are they what you expected?
 
+ggplot(data = gapminder, 
+       aes(x = year, y = lifeExp,
+           color=continent)) + 
+  geom_point()
+
+
 ############################
 # ---- Layers
 ############################
@@ -156,7 +162,7 @@ ggplot(data = gapminder,
   aes(x = gdpPercap, y = lifeExp)) +
   geom_point(alpha=0.5) + 
   scale_x_log10() + 
-  geom_smooth(method="lm", aes(group=continent))
+  geom_smooth(method="lm", aes(color=continent))
 
 # We can make the line thicker by *setting* the **size** aesthetic in the
 # `geom_smooth` layer:
@@ -164,7 +170,7 @@ ggplot(data = gapminder,
 ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
   geom_point() + 
   scale_x_log10() + 
-  geom_smooth(method="lm", size=1.5)
+  geom_smooth(method="lm", aes(size=continent))
 
 # There are two ways an *aesthetic* can be specified. Here we *set* the **size**
 #  aesthetic by passing it as an argument to `geom_smooth`. Previously in the
@@ -189,7 +195,7 @@ ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
 # Modify your solution to Challenge 4a so that the points are now a different shape and are colored by continent.
 
 ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
-  geom_point(aes(color=continent), shape=2) + 
+  geom_point(aes(color=continent, shape=continent), ) + 
   scale_x_log10() + 
   geom_smooth(method="lm", size=1.5)
 
@@ -293,20 +299,22 @@ ggplot(data=gapminder,
            group=country)) +
   geom_line(aes(color=continent), size=0.1)+
   facet_wrap(~continent)+
-  theme(axis.text.x = element_text(size = 2, color = "black"), 
-        axis.text.y = element_text(size = 25, color = "black"), 
-        axis.title.y = element_text(size = 35), 
-        plot.background = element_rect(fill="orange"), 
-        panel.background = element_rect(fill="purple"), 
+  ylab("Life Expectancy")+
+  theme(axis.text.x = element_text(size = 12, ang=90, color = "black"), 
+        axis.text.y = element_text(size = 12, color = "black"), 
+        axis.title.y = element_text(size = 20), 
+        plot.background = element_rect(fill="white"), 
+        panel.background = element_rect(fill="white", color="black"), 
         panel.grid.major = element_line(colour = NA), 
         panel.grid.minor = element_line(colour = NA), 
         title = element_text(size = 20), 
-        axis.line.x = element_line(colour = "black"), 
-        axis.line.y = element_line(colour = "black"), 
-        strip.background = element_rect(fill = "red", color = "blue"), 
-        strip.text = element_text(size = 15, color="green"),
-        legend.background = element_rect(fill="blue"),
-        legend.text = element_text(color="yellow"))
+#        axis.line.x = element_line(colour = "black"), 
+#        axis.line.y = element_line(colour = "black"), 
+        strip.background = element_rect(fill = "white", color = "black"), 
+        strip.text = element_text(size = 15, color="black"),
+        legend.background = element_rect(fill="white"),
+        legend.text = element_text(color="black"),
+        legend.key=element_rect(fill="white"))
   
 
 
@@ -351,19 +359,24 @@ ggplot(gapminder, aes(x=gdpPercap, y=lifeExp))+
 ## Saving, Stacking and Rearranging Graphs (gridExtra)
 ###################################
 
-(a <- ggplot(gapminder[gapminder$continent=="Oceania",], 
-             aes(x=year, y=lifeExp, group=country)) + 
+(a <- gapminder %>%
+          filter(continent=="Oceania") %>%
+          ggplot(aes(x=year, y=lifeExp, group=country)) + 
   geom_line())
 
-(b <- ggplot(gapminder[gapminder$continent=="Europe",], 
-             aes(x=year, y=gdpPercap, group=country)) + 
+(b <- gapminder %>%
+          filter(continent=="Europe") %>%
+          ggplot(aes(x=year, y=gdpPercap,
+                     group=country)) + 
   geom_line())
+
+
+grid.arrange(a,b,a,b,nrow=2)
 
 #ggsave(a, file="filenamehere.extension")
 ggsave(a, file="~/../Desktop/example_file.jpeg", 
-       height=3, width=3, units="cm", dpi=600)
+       height=4, width=4, units="cm", dpi=600)
 
-grid.arrange(a,b,a,b,nrow=2)
 
 png("~/../Desktop/x.png", height=12, width=12, units="cm", res=300)
 
